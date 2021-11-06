@@ -13,16 +13,36 @@ namespace Sudoku.NeuralNetworkSolver
 {
     public class NeuralNetHelper
     {
+        private const string ModuleNameTensorFlow = "tensorflow";
+        private const string ModuleNameKeras = "keras";
+        private const string ModuleNameTensorFlowKeras = "tensorflow.keras";
 
         static NeuralNetHelper()
         {
+
             Installer.SetupPython().Wait();
+
+
             //PythonEngine.PythonHome = @"C:\Users\vavav\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Anaconda3 (64-bit)"; //PYTHON INCLUDED qui embarque la distribution python
             PythonEngine.PythonHome = Python.Included.Installer.EmbeddedPythonHome;
-            Installer.TryInstallPip();
-            Installer.PipInstallModule("tensorflow");
-            Installer.PipInstallModule("keras");
-            Installer.PipInstallModule("tensorflow.keras");
+            if (!Installer.IsPipInstalled())
+            {
+                Installer.TryInstallPip();
+            }
+            if (!Installer.IsModuleInstalled(ModuleNameTensorFlow))
+            {
+                Installer.PipInstallModule(ModuleNameTensorFlow);
+            }
+            if (!Installer.IsModuleInstalled(ModuleNameKeras))
+            {
+                Installer.PipInstallModule(ModuleNameKeras);
+            }
+            //if (!Installer.IsModuleInstalled(ModuleNameTensorFlowKeras))
+            //{
+            //    Installer.PipInstallModule(ModuleNameTensorFlowKeras);
+            //}
+
+           
             //var k = Keras.Keras.Instance;
             Setup.UseTfKeras();
         }
